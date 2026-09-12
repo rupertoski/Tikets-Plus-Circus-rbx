@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tickets Plus Circus</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #080b16;
+    color: white;
+    text-align: center;
+}
+
+header {
+    padding: 25px;
+    background: #11182b;
+    border-bottom: 3px solid #d4a72c;
+}
+
+h1 {
+    margin: 0;
+    font-size: 35px;
+}
+
+.contenedor {
+    max-width: 1100px;
+    margin: 30px auto;
+    padding: 20px;
+}
+
+.panel {
+    background: #11182b;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 25px;
+}
+
+select, input {
+    padding: 12px;
+    margin: 8px;
+    border-radius: 8px;
+    border: 1px solid #555;
+    background: #202941;
+    color: white;
+}
+
+.sector {
+    margin: 25px auto;
+}
+
+.sector h2 {
+    margin-bottom: 15px;
+}
+
+.asientos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+}
+
+.asiento {
+    width: 42px;
+    height: 42px;
+    border: 0;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.galeria {
+    background: #18a957;
+}
+
+.platea {
+    background: #d6a719;
+}
+
+.palco {
+    background: #d62828;
+}
+
+.asiento:hover {
+    transform: scale(1.08);
+}
+
+.ocupado {
+    background: #555 !important;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.seleccionado {
+    outline: 4px solid white;
+}
+
+#confirmar {
+    margin-top: 25px;
+    padding: 15px 30px;
+    background: #d4a72c;
+    border: none;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#resultado {
+    margin-top: 20px;
+    font-size: 18px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🎪 TICKETS PLUS CIRCUS</h1>
+    <p>Reserva tu entrada gratuita</p>
+</header>
+
+<div class="contenedor">
+
+    <div class="panel">
+        <h2>📅 Selecciona tu función</h2>
+
+        <select id="fecha">
+            <option>Selecciona una fecha</option>
+            <option>20/09/2026</option>
+            <option>21/09/2026</option>
+        </select>
+
+        <select id="hora">
+            <option>Selecciona un horario</option>
+            <option>15:30 hrs</option>
+            <option>17:30 hrs</option>
+            <option>20:00 hrs</option>
+        </select>
+    </div>
+
+    <div class="panel">
+        <h2>🪑 Mapa de asientos</h2>
+
+        <h3>🎪 ESCENARIO</h3>
+
+        <div class="sector">
+            <h2>🟢 GALERÍA</h2>
+            <div class="asientos" id="galeria"></div>
+        </div>
+
+        <div class="sector">
+            <h2>🟡 PLATEA</h2>
+            <div class="asientos" id="platea"></div>
+        </div>
+
+        <div class="sector">
+            <h2>🔴 PALCO</h2>
+            <div class="asientos" id="palco"></div>
+        </div>
+    </div>
+
+    <div class="panel">
+        <h2>👤 Datos del asistente</h2>
+
+        <input
+            type="text"
+            id="usuario"
+            placeholder="Usuario de Roblox"
+        >
+
+        <br>
+
+        <button id="confirmar" onclick="reservar()">
+            🎟️ RESERVAR ASIENTO
+        </button>
+
+        <div id="resultado"></div>
+    </div>
+
+</div>
+
+<script>
+
+let asientoSeleccionado = null;
+let sectorSeleccionado = null;
+
+function crearAsientos(sector, cantidad) {
+
+    const contenedor = document.getElementById(sector);
+
+    for (let i = 1; i <= cantidad; i++) {
+
+        const boton = document.createElement("button");
+
+        boton.className = "asiento " + sector;
+        boton.textContent = i;
+
+        boton.onclick = function() {
+
+            if (boton.classList.contains("ocupado")) {
+                return;
+            }
+
+            document.querySelectorAll(".asiento")
+                .forEach(a => a.classList.remove("seleccionado"));
+
+            boton.classList.add("seleccionado");
+
+            asientoSeleccionado = i;
+            sectorSeleccionado = sector;
+        };
+
+        contenedor.appendChild(boton);
+    }
+}
+
+crearAsientos("galeria", 10);
+crearAsientos("platea", 10);
+crearAsientos("palco", 10);
+
+function reservar() {
+
+    const usuario = document.getElementById("usuario").value;
+    const fecha = document.getElementById("fecha").value;
+    const hora = document.getElementById("hora").value;
+
+    if (!usuario || !asientoSeleccionado || fecha === "Selecciona una fecha" || hora === "Selecciona un horario") {
+
+        document.getElementById("resultado").innerHTML =
+            "⚠️ Completa todos los datos y selecciona un asiento.";
+
+        return;
+    }
+
+    document.getElementById("resultado").innerHTML =
+        "🎟️ Reserva preparada para @" + usuario +
+        "<br>📅 " + fecha +
+        "<br>🕐 " + hora +
+        "<br>🪑 " + sectorSeleccionado +
+        " — Asiento " + asientoSeleccionado;
+}
+
+</script>
+
+</body>
+</html>
