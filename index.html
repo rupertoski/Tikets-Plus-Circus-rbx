@@ -248,3 +248,273 @@ function reservar() {
 
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tickets Plus Circus</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #071b52;
+    color: white;
+    text-align: center;
+}
+
+header {
+    padding: 25px 15px;
+    background: #10152e;
+    border-bottom: 3px solid #f5c542;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 30px;
+}
+
+header p {
+    margin: 10px 0 0;
+    font-size: 18px;
+}
+
+.seccion {
+    padding: 30px 15px;
+}
+
+select, input {
+    padding: 14px;
+    margin: 8px;
+    border-radius: 8px;
+    border: 2px solid #8eb4ff;
+    background: #173b82;
+    color: white;
+    font-size: 16px;
+}
+
+.mapa {
+    margin-top: 20px;
+}
+
+.tipo {
+    margin: 25px 0;
+}
+
+.tipo h3 {
+    font-size: 22px;
+}
+
+.asientos {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.asiento {
+    width: 45px;
+    height: 42px;
+    border: none;
+    border-radius: 9px;
+    cursor: pointer;
+    font-weight: bold;
+    color: white;
+}
+
+.galeria {
+    background: #39c96b;
+}
+
+.platea {
+    background: #f4c542;
+    color: #222;
+}
+
+.palco {
+    background: #f05273;
+}
+
+.seleccionado {
+    background: #ff3030 !important;
+    color: white;
+}
+
+.datos {
+    margin-top: 35px;
+    padding: 25px;
+    background: #0d2c6b;
+    border-radius: 15px;
+}
+
+button#reservar {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 10px;
+    background: #f4d35e;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#mensaje {
+    margin-top: 20px;
+    font-size: 18px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🎪 TICKETS PLUS CIRCUS</h1>
+    <p>Reserva tu entrada gratuita</p>
+</header>
+
+<section class="seccion">
+
+<h2>📅 Selecciona tu función</h2>
+
+<select id="funcion">
+    <option value="">Selecciona una función</option>
+
+    <option value="12-09-2026-17:30">
+        HOY — 12 de septiembre — 17:30 🇨🇱 🇦🇷 / 14:30 🇲🇽
+    </option>
+
+    <option value="13-09-2026-17:30">
+        MAÑANA — 13 de septiembre — 17:30 🇨🇱 🇦🇷 / 14:30 🇲🇽
+    </option>
+
+    <option value="13-09-2026-20:30">
+        MAÑANA — 13 de septiembre — 20:30 🇨🇱 🇦🇷 / 17:30 🇲🇽
+    </option>
+</select>
+
+<div class="mapa">
+
+<h2>🪑 Mapa de asientos</h2>
+
+<h3>🎪 ESCENARIO</h3>
+
+<div class="tipo">
+<h3>🟢 GALERÍA</h3>
+
+<div class="asientos">
+<script>
+for(let i = 1; i <= 10; i++) {
+    document.write(
+        `<button class="asiento galeria" onclick="seleccionar(this, 'Galería', ${i})">${i}</button>`
+    );
+}
+</script>
+</div>
+</div>
+
+<div class="tipo">
+<h3>🟡 PLATEA</h3>
+
+<div class="asientos">
+<script>
+for(let i = 1; i <= 10; i++) {
+    document.write(
+        `<button class="asiento platea" onclick="seleccionar(this, 'Platea', ${i})">${i}</button>`
+    );
+}
+</script>
+</div>
+</div>
+
+<div class="tipo">
+<h3>🔴 PALCO</h3>
+
+<div class="asientos">
+<script>
+for(let i = 1; i <= 10; i++) {
+    document.write(
+        `<button class="asiento palco" onclick="seleccionar(this, 'Palco', ${i})">${i}</button>`
+    );
+}
+</script>
+</div>
+</div>
+
+</div>
+
+<div class="datos">
+
+<h2>👤 Datos del asistente</h2>
+
+<input
+    type="text"
+    id="usuario"
+    placeholder="Usuario de Roblox"
+>
+
+<br>
+
+<button id="reservar" onclick="reservar()">
+    🎟️ RESERVAR ASIENTO
+</button>
+
+<div id="mensaje"></div>
+
+</div>
+
+</section>
+
+<script>
+
+let asientoSeleccionado = null;
+let nombreAsiento = "";
+
+function seleccionar(boton, zona, numero) {
+
+    if (!document.getElementById("funcion").value) {
+        alert("Primero selecciona una función.");
+        return;
+    }
+
+    document.querySelectorAll(".asiento").forEach(a => {
+        a.classList.remove("seleccionado");
+    });
+
+    boton.classList.add("seleccionado");
+
+    asientoSeleccionado = boton;
+    nombreAsiento = zona + " " + numero;
+}
+
+function reservar() {
+
+    const funcion = document.getElementById("funcion").value;
+    const usuario = document.getElementById("usuario").value.trim();
+
+    if (!funcion) {
+        alert("Selecciona una función.");
+        return;
+    }
+
+    if (!asientoSeleccionado) {
+        alert("Selecciona un asiento.");
+        return;
+    }
+
+    if (!usuario) {
+        alert("Escribe tu usuario de Roblox.");
+        return;
+    }
+
+    document.getElementById("mensaje").innerHTML =
+        "🎟️ Reserva realizada correctamente.<br><br>" +
+        "👤 Usuario: <b>" + usuario + "</b><br>" +
+        "🪑 Asiento: <b>" + nombreAsiento + "</b>";
+
+    asientoSeleccionado.disabled = true;
+}
+
+</script>
+
+</body>
+</html>
