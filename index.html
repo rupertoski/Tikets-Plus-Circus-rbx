@@ -1,367 +1,140 @@
 <!DOCTYPE html>
 <html lang="es">
-<head><link rel="icon" type="image/jpeg" href="logo.jpeg">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tickets Plus Circus</title>
-
-<style>
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #080b16;
-    color: white;
-    text-align: center;
-}
-
-header {
-    padding: 25px;
-    background: #11182b;
-    border-bottom: 3px solid #d4a72c;
-}
-
-h1 {
-    margin: 0;
-    font-size: 35px;
-}
-
-.contenedor {
-    max-width: 1100px;
-    margin: 30px auto;
-    padding: 20px;
-}
-
-.panel {
-    background: #11182b;
-    border-radius: 15px;
-    padding: 25px;
-    margin-bottom: 25px;
-}
-
-select, input {
-    padding: 12px;
-    margin: 8px;
-    border-radius: 8px;
-    border: 1px solid #555;
-    background: #202941;
-    color: white;
-}
-
-.sector {
-    margin: 25px auto;
-}
-
-.sector h2 {
-    margin-bottom: 15px;
-}
-
-.asientos {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px;
-}
-
-.asiento {
-    width: 42px;
-    height: 42px;
-    border: 0;
-    border-radius: 8px;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.galeria {
-    background: #18a957;
-}
-
-.platea {
-    background: #d6a719;
-}
-
-.palco {
-    background: #d62828;
-}
-
-.asiento:hover {
-    transform: scale(1.08);
-}
-
-.ocupado {
-    background: #555 !important;
-    cursor: not-allowed;
-    opacity: 0.5;
-}
-
-.seleccionado {
-    outline: 4px solid white;
-}
-
-#confirmar {
-    margin-top: 25px;
-    padding: 15px 30px;
-    background: #d4a72c;
-    border: none;
-    border-radius: 10px;
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-#resultado {
-    margin-top: 20px;
-    font-size: 18px;
-}
-</style>
-</head>
-
-<body>
-
-<header>
-    <h1>🎪 TICKETS PLUS CIRCUS</h1>
-    <p>Reserva tu entrada gratuita</p>
-</header>
-
-<div class="contenedor">
-
-    <div class="panel">
-        <h2>📅 Selecciona tu función</h2>
-
-        <select id="fecha">
-            <option>Selecciona una fecha</option>
-            <option>20/09/2026</option>
-            <option>21/09/2026</option>
-        </select>
-
-        <select id="hora">
-            <option>Selecciona un horario</option>
-            <option>15:30 hrs</option>
-            <option>17:30 hrs</option>
-            <option>20:00 hrs</option>
-        </select>
-    </div>
-
-    <div class="panel">
-        <h2>🪑 Mapa de asientos</h2>
-
-        <h3>🎪 ESCENARIO</h3>
-
-        <div class="sector">
-            <h2>🟢 GALERÍA</h2>
-            <div class="asientos" id="galeria"></div>
-        </div>
-
-        <div class="sector">
-            <h2>🟡 PLATEA</h2>
-            <div class="asientos" id="platea"></div>
-        </div>
-
-        <div class="sector">
-            <h2>🔴 PALCO</h2>
-            <div class="asientos" id="palco"></div>
-        </div>
-    </div>
-
-    <div class="panel">
-        <h2>👤 Datos del asistente</h2>
-
-        <input
-            type="text"
-            id="usuario"
-            placeholder="Usuario de Roblox"
-        >
-
-        <br>
-
-        <button id="confirmar" onclick="reservar()">
-            🎟️ RESERVAR ASIENTO
-        </button>
-
-        <div id="resultado"></div>
-    </div>
-
-</div>
-
-<script>
-
-let asientoSeleccionado = null;
-let sectorSeleccionado = null;
-
-function crearAsientos(sector, cantidad) {
-
-    const contenedor = document.getElementById(sector);
-
-    for (let i = 1; i <= cantidad; i++) {
-
-        const boton = document.createElement("button");
-
-        boton.className = "asiento " + sector;
-        boton.textContent = i;
-
-        boton.onclick = function() {
-
-            if (boton.classList.contains("ocupado")) {
-                return;
-            }
-
-            document.querySelectorAll(".asiento")
-                .forEach(a => a.classList.remove("seleccionado"));
-
-            boton.classList.add("seleccionado");
-
-            asientoSeleccionado = i;
-            sectorSeleccionado = sector;
-        };
-
-        contenedor.appendChild(boton);
-    }
-}
-
-crearAsientos("galeria", 10);
-crearAsientos("platea", 10);
-crearAsientos("palco", 10);
-
-function reservar() {
-
-    const usuario = document.getElementById("usuario").value;
-    const fecha = document.getElementById("fecha").value;
-    const hora = document.getElementById("hora").value;
-
-    if (!usuario || !asientoSeleccionado || fecha === "Selecciona una fecha" || hora === "Selecciona un horario") {
-
-        document.getElementById("resultado").innerHTML =
-            "⚠️ Completa todos los datos y selecciona un asiento.";
-
-        return;
-    }
-
-    document.getElementById("resultado").innerHTML =
-        "🎟️ Reserva preparada para @" + usuario +
-        "<br>📅 " + fecha +
-        "<br>🕐 " + hora +
-        "<br>🪑 " + sectorSeleccionado +
-        " — Asiento " + asientoSeleccionado;
-}
-
-</script>
-
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Tickets Plus Circus</title>
+<link rel="icon" type="image/jpeg" href="logo.jpeg">
 
 <style>
+
+* {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
     font-family: Arial, sans-serif;
     background: #071b52;
     color: white;
-    text-align: center;
 }
 
+/* ENCABEZADO */
+
 header {
-    padding: 25px 15px;
+    text-align: center;
+    padding: 30px 15px;
     background: #10152e;
-    border-bottom: 3px solid #f5c542;
+    border-bottom: 3px solid #f4c542;
 }
 
 header h1 {
     margin: 0;
-    font-size: 30px;
+    font-size: 32px;
 }
 
 header p {
-    margin: 10px 0 0;
+    margin-top: 10px;
     font-size: 18px;
 }
 
-.seccion {
-    padding: 30px 15px;
+/* CIRCOS */
+
+.titulo-circos {
+    text-align: center;
+    padding: 30px 15px 15px;
 }
 
-select, input {
+.titulo-circos h2 {
+    margin: 0;
+    font-size: 26px;
+}
+
+/* LINEA CORREDIZA */
+
+.carrusel {
+    width: 100%;
+    overflow: hidden;
+    padding: 25px 0;
+    background: #0d2c6b;
+}
+
+.linea {
+    display: flex;
+    width: max-content;
+    gap: 20px;
+    animation: mover 25s linear infinite;
+}
+
+@keyframes mover {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+/* TARJETAS */
+
+.circo {
+    width: 190px;
+    min-width: 190px;
+    padding: 15px;
+    border-radius: 18px;
+    background: #173b82;
+    border: 2px solid #8eb4ff;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.circo:hover {
+    transform: scale(1.05);
+    border-color: #f4c542;
+}
+
+.circo img {
+    width: 130px;
+    height: 130px;
+    object-fit: cover;
+    border-radius: 15px;
+    background: white;
+}
+
+.circo h3 {
+    margin: 12px 0 0;
+    font-size: 17px;
+}
+
+/* CONTENIDO DEL CIRCO */
+
+#contenido {
+    display: none;
+    padding: 35px 15px;
+    text-align: center;
+}
+
+#contenido h2 {
+    font-size: 28px;
+}
+
+.selector {
+    margin-top: 25px;
+}
+
+select {
     padding: 14px;
-    margin: 8px;
-    border-radius: 8px;
+    border-radius: 10px;
     border: 2px solid #8eb4ff;
     background: #173b82;
     color: white;
     font-size: 16px;
+    min-width: 260px;
 }
 
-.mapa {
-    margin-top: 20px;
-}
-
-.tipo {
-    margin: 25px 0;
-}
-
-.tipo h3 {
-    font-size: 22px;
-}
-
-.asientos {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-.asiento {
-    width: 45px;
-    height: 42px;
-    border: none;
-    border-radius: 9px;
-    cursor: pointer;
-    font-weight: bold;
-    color: white;
-}
-
-.galeria {
-    background: #39c96b;
-}
-
-.platea {
-    background: #f4c542;
-    color: #222;
-}
-
-.palco {
-    background: #f05273;
-}
-
-.seleccionado {
-    background: #ff3030 !important;
-    color: white;
-}
-
-.datos {
-    margin-top: 35px;
-    padding: 25px;
-    background: #0d2c6b;
-    border-radius: 15px;
-}
-
-button#reservar {
-    padding: 15px 30px;
-    border: none;
-    border-radius: 10px;
-    background: #f4d35e;
-    font-size: 17px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-#mensaje {
-    margin-top: 20px;
-    font-size: 18px;
-}
 </style>
 </head>
 
@@ -372,146 +145,121 @@ button#reservar {
     <p>Reserva tu entrada gratuita</p>
 </header>
 
-<section class="seccion">
 
-<h2>📅 Selecciona tu función</h2>
-
-<select id="funcion">
-    <option value="">Selecciona una función</option>
-
-    <option value="12-09-2026-17:30">
-        HOY — 12 de septiembre — 17:30 🇨🇱 🇦🇷 / 14:30 🇲🇽
-    </option>
-
-    <option value="13-09-2026-17:30">
-        MAÑANA — 13 de septiembre — 17:30 🇨🇱 🇦🇷 / 14:30 🇲🇽
-    </option>
-
-    <option value="13-09-2026-20:30">
-        MAÑANA — 13 de septiembre — 20:30 🇨🇱 🇦🇷 / 17:30 🇲🇽
-    </option>
-</select>
-
-<div class="mapa">
-
-<h2>🪑 Mapa de asientos</h2>
-
-<h3>🎪 ESCENARIO</h3>
-
-<div class="tipo">
-<h3>🟢 GALERÍA</h3>
-
-<div class="asientos">
-<script>
-for(let i = 1; i <= 10; i++) {
-    document.write(
-        `<button class="asiento galeria" onclick="seleccionar(this, 'Galería', ${i})">${i}</button>`
-    );
-}
-</script>
-</div>
+<div class="titulo-circos">
+    <h2>🎪 Circos disponibles</h2>
 </div>
 
-<div class="tipo">
-<h3>🟡 PLATEA</h3>
 
-<div class="asientos">
-<script>
-for(let i = 1; i <= 10; i++) {
-    document.write(
-        `<button class="asiento platea" onclick="seleccionar(this, 'Platea', ${i})">${i}</button>`
-    );
-}
-</script>
+<!-- LINEA DE CIRCOS -->
+
+<div class="carrusel">
+
+<div class="linea">
+
+    <!-- CIRCO CONTINENTAL -->
+
+    <div class="circo" onclick="seleccionarCirco('Circo Continental')">
+        <img src="continental.jpeg">
+        <h3>Circo Continental</h3>
+    </div>
+
+
+    <!-- CIRCO PANAMERICANO -->
+
+    <div class="circo" onclick="seleccionarCirco('Circo Panamericano')">
+        <img src="panamericano.jpeg">
+        <h3>Circo Panamericano</h3>
+    </div>
+
+
+    <!-- ZEBRA -->
+
+    <div class="circo" onclick="seleccionarCirco('Zebra')">
+        <img src="zebra.jpeg">
+        <h3>Zebra — La Nueva Carpa</h3>
+    </div>
+
+
+    <!-- HNOS FUENTES GASCA -->
+
+    <div class="circo" onclick="seleccionarCirco('Hnos. Fuentes Gasca')">
+        <img src="fuentes.jpeg">
+        <h3>Hnos. Fuentes Gasca</h3>
+    </div>
+
+
+    <!-- VALENTINOS -->
+
+    <div class="circo" onclick="seleccionarCirco('Circo de los Valentinos')">
+        <img src="valentinos.jpeg">
+        <h3>Circo de los Valentinos</h3>
+    </div>
+
+
+    <!-- REPETIMOS PARA QUE LA LINEA SEA CONTINUA -->
+
+    <div class="circo" onclick="seleccionarCirco('Circo Continental')">
+        <img src="continental.jpeg">
+        <h3>Circo Continental</h3>
+    </div>
+
+    <div class="circo" onclick="seleccionarCirco('Circo Panamericano')">
+        <img src="panamericano.jpeg">
+        <h3>Circo Panamericano</h3>
+    </div>
+
+    <div class="circo" onclick="seleccionarCirco('Zebra')">
+        <img src="zebra.jpeg">
+        <h3>Zebra — La Nueva Carpa</h3>
+    </div>
+
+    <div class="circo" onclick="seleccionarCirco('Hnos. Fuentes Gasca')">
+        <img src="fuentes.jpeg">
+        <h3>Hnos. Fuentes Gasca</h3>
+    </div>
+
+    <div class="circo" onclick="seleccionarCirco('Circo de los Valentinos')">
+        <img src="valentinos.jpeg">
+        <h3>Circo de los Valentinos</h3>
+    </div>
+
 </div>
-</div>
-
-<div class="tipo">
-<h3>🔴 PALCO</h3>
-
-<div class="asientos">
-<script>
-for(let i = 1; i <= 10; i++) {
-    document.write(
-        `<button class="asiento palco" onclick="seleccionar(this, 'Palco', ${i})">${i}</button>`
-    );
-}
-</script>
-</div>
-</div>
 
 </div>
 
-<div class="datos">
 
-<h2>👤 Datos del asistente</h2>
+<!-- AQUÍ APARECERÁ LA INFORMACIÓN DEL CIRCO -->
 
-<input
-    type="text"
-    id="usuario"
-    placeholder="Usuario de Roblox"
->
+<section id="contenido">
 
-<br>
+    <h2 id="nombreCirco"></h2>
 
-<button id="reservar" onclick="reservar()">
-    🎟️ RESERVAR ASIENTO
-</button>
+    <div class="selector">
 
-<div id="mensaje"></div>
+        <h3>📅 Selecciona tu función</h3>
 
-</div>
+        <select id="funcion">
+            <option>Selecciona una función</option>
+        </select>
+
+    </div>
 
 </section>
 
+
 <script>
 
-let asientoSeleccionado = null;
-let nombreAsiento = "";
+function seleccionarCirco(nombre) {
 
-function seleccionar(boton, zona, numero) {
+    document.getElementById("contenido").style.display = "block";
 
-    if (!document.getElementById("funcion").value) {
-        alert("Primero selecciona una función.");
-        return;
-    }
+    document.getElementById("nombreCirco").innerText =
+        "🎪 " + nombre;
 
-    document.querySelectorAll(".asiento").forEach(a => {
-        a.classList.remove("seleccionado");
+    document.getElementById("contenido").scrollIntoView({
+        behavior: "smooth"
     });
-
-    boton.classList.add("seleccionado");
-
-    asientoSeleccionado = boton;
-    nombreAsiento = zona + " " + numero;
-}
-
-function reservar() {
-
-    const funcion = document.getElementById("funcion").value;
-    const usuario = document.getElementById("usuario").value.trim();
-
-    if (!funcion) {
-        alert("Selecciona una función.");
-        return;
-    }
-
-    if (!asientoSeleccionado) {
-        alert("Selecciona un asiento.");
-        return;
-    }
-
-    if (!usuario) {
-        alert("Escribe tu usuario de Roblox.");
-        return;
-    }
-
-    document.getElementById("mensaje").innerHTML =
-        "🎟️ Reserva realizada correctamente.<br><br>" +
-        "👤 Usuario: <b>" + usuario + "</b><br>" +
-        "🪑 Asiento: <b>" + nombreAsiento + "</b>";
-
-    asientoSeleccionado.disabled = true;
 }
 
 </script>
