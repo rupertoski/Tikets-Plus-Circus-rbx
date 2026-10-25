@@ -2,287 +2,394 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Tickets Plus Circus</title>
-<link rel="icon" type="image/jpeg" href="logo.jpeg">
+<link rel="icon" href="logo.jpeg" type="image/jpeg">
 
 <style>
-
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #071b52;
-    color: white;
-}
-
-/* ENCABEZADO */
-
-header {<div class="carrusel-circos">
-    <div class="carrusel-contenido">
-
-        <img src="continental.jpeg" alt="Circo Continental">
-
-        <img src="panamericano.jpeg" alt="Circo Panamericano">
-
-    
-
-        <img src="fuentes.jpeg" alt="Circo Hnos. Fuentes Gasca">
-
-        <img src="valentinos.jpeg" alt="Circo Los Valentinos">
-
-        <img src="continental.jpeg" alt="Circo Continental">
-
-        <img src="panamericano.jpeg" alt="Circo Panamericano">
-
-        <img src="fuentes.jpeg" alt="Circo Hnos. Fuentes Gasca">
-
-        <img src="valentinos.jpeg" alt="Circo Los Valentinos">
-
-    </div>
-</div>
-    text-align: center;
-    padding: 30px 15px;
-    background: #10152e;
-    border-bottom: 3px solid #f4c542;
-}
-
-header h1 {
-    margin: 0;
-    font-size: 32px;
-}
-
-header p {
-    margin-top: 10px;
-    font-size: 18px;
-}
-
-/* CIRCOS */
-
-.titulo-circos {
-    text-align: center;
-    padding: 30px 15px 15px;
-}
-
-.titulo-circos h2 {
-    margin: 0;
-    font-size: 26px;
-}
-
-/* LINEA CORREDIZA */
-
-.carrusel {
-    width: 100%;
-    overflow: hidden;
-    padding: 25px 0;
-    background: #0d2c6b;
-}
-
-.linea {
-    display: flex;
-    width: max-content;
-    gap: 20px;
-    animation: mover 25s linear infinite;
-}
-
-@keyframes mover {
-    from {
-        transform: translateX(0);
-    }
-
-    to {
-        transform: translateX(-50%);
-    }
-}
-
-/* TARJETAS */
-
-.circo {
-    width: 190px;
-    min-width: 190px;
-    padding: 15px;
-    border-radius: 18px;
-    background: #173b82;
-    border: 2px solid #8eb4ff;
-    text-align: center;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.circo:hover {
-    transform: scale(1.05);
-    border-color: #f4c542;
-}
-
-.circo img {
-    width: 130px;
-    height: 130px;
-    object-fit: cover;
-    border-radius: 15px;
-    background: white;
-}
-
-.circo h3 {
-    margin: 12px 0 0;
-    font-size: 17px;
-}
-
-/* CONTENIDO DEL CIRCO */
-
-#contenido {
-    display: none;
-    padding: 35px 15px;
-    text-align: center;
-}
-
-#contenido h2 {
-    font-size: 28px;
-}
-
-.selector {
-    margin-top: 25px;
-}
-
-select {
-    padding: 14px;
-    border-radius: 10px;
-    border: 2px solid #8eb4ff;
-    background: #173b82;
-    color: white;
-    font-size: 16px;
-    min-width: 260px;
-}
-
+:root{--fondo:#100d18;--panel:#211a2b;--oro:#f5ca68;--texto:#fffaf1;--verde:#258b65;--rojo:#d64250}
+*{box-sizing:border-box}
+body{margin:0;background:var(--fondo);color:var(--texto);font-family:Arial,sans-serif}
+header{text-align:center;padding:24px 12px;background:linear-gradient(130deg,#491b40,#151021);border-bottom:3px solid var(--oro)}
+header img{width:85px;height:85px;object-fit:contain}
+h1,h2,h3{color:var(--oro)}
+h1{margin:8px 0}
+main{max-width:1000px;margin:auto;padding:16px}
+.panel{background:var(--panel);padding:18px;margin:16px 0;border:1px solid #49374f;border-radius:14px}
+.carrusel{display:flex;gap:12px;overflow-x:auto;padding:10px 3px 16px;scrollbar-width:thin}
+.tarjeta{flex:0 0 145px;background:#15111e;color:white;border:2px solid #51405a;border-radius:12px;padding:12px;cursor:pointer;scroll-snap-align:start}
+.tarjeta.activo{border-color:var(--oro)}
+.tarjeta img{width:100%;height:95px;object-fit:contain}
+.tarjeta p{overflow-wrap:anywhere}
+label{display:block;margin:14px 0 6px}
+input,select{width:100%;padding:12px;border-radius:8px;border:1px solid #62516c;background:#130f1b;color:white;font-size:16px}
+button{font-size:14px}
+.boton{padding:12px 16px;border:0;border-radius:8px;background:var(--oro);color:#251629;font-weight:bold;cursor:pointer;margin-top:12px}
+.horarios{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:10px}
+.hora{padding:12px;background:#15111e;border-radius:8px}
+.hora strong{display:block;color:var(--oro);margin-bottom:6px}
+.asientos{display:grid;grid-template-columns:repeat(auto-fill,minmax(49px,1fr));gap:8px;margin-top:14px}
+.asiento{padding:11px 3px;border:0;border-radius:6px;background:var(--verde);color:white;cursor:pointer}
+.asiento.elegido{outline:3px solid var(--oro)}
+.asiento.ocupado{background:var(--rojo);cursor:not-allowed}
+.aviso{padding:12px;background:#15111e;border-radius:8px;line-height:1.5}
+#estado{min-height:24px;color:var(--oro);line-height:1.5}
+footer{text-align:center;padding:22px;color:#c9bfd5}
 </style>
 </head>
 
 <body>
-
 <header>
-    <h1>🎪 TICKETS PLUS CIRCUS</h1>
-    <p>Reserva tu entrada gratuita</p>
+  <img src="logo.jpeg" alt="Tickets Plus Circus">
+  <h1>Tickets Plus Circus</h1>
+  <p>Tu entrada al espectáculo comienza aquí 🎪</p>
 </header>
 
+<main>
+  <section class="panel">
+    <h2>🎪 Selecciona tu circo</h2>
+    <p>Desliza los logos horizontalmente para ver más circos.</p>
+    <div id="carrusel" class="carrusel"></div>
+  </section>
 
-<div class="titulo-circos">
-    <h2>🎪 Circos disponibles</h2>
-</div>
+  <section class="panel">
+    <h2 id="nombreCirco">Elige un circo</h2>
+    <p id="descripcion">Selecciona uno de los logos de arriba.</p>
 
+    <label for="usuario">Usuario de Roblox</label>
+    <input id="usuario" maxlength="20" placeholder="Tu usuario de Roblox" autocomplete="off">
 
-<!-- LINEA DE CIRCOS -->
+    <label for="fecha">Fecha</label>
+    <select id="fecha"></select>
 
-<div class="carrusel">
+    <label for="funcion">Función</label>
+    <select id="funcion"></select>
 
-<div class="linea">
+    <h3>🕒 Horarios por país</h3>
+    <div id="horarios" class="horarios"></div>
 
-    <!-- CIRCO CONTINENTAL -->
+    <label for="seccion">Sección</label>
+    <select id="seccion"></select>
 
-    <div class="circo" onclick="seleccionarCirco('Circo Continental')">
-        <img src="continental.jpeg">
-        <h3>Circo Continental</h3>
-    </div>
+    <h3>💺 Elige tu asiento</h3>
+    <p class="aviso">🟢 Disponible · 🟡 Seleccionado · 🔴 Ocupado</p>
+    <div id="asientos" class="asientos"></div>
 
+    <button id="reservar" class="boton">Probar reserva</button>
+    <p id="estado" role="status"></p>
+    <p class="aviso">
+      Versión de prueba: las reservas se guardan solamente en este navegador.
+      Todavía no se comparten con otros visitantes ni se envían por correo.
+    </p>
+  </section>
+</main>
 
-    <!-- CIRCO PANAMERICANO -->
-
-    <div class="circo" onclick="seleccionarCirco('Circo Panamericano')">
-        <img src="panamericano.jpeg">
-        <h3>Circo Panamericano</h3>
-    </div>
-
-
-    
-
-    
-
-
-    <!-- HNOS FUENTES GASCA -->
-
-    <div class="circo" onclick="seleccionarCirco('Hnos. Fuentes Gasca')">
-        <img src="fuentes.jpeg">
-        <h3>Hnos. Fuentes Gasca</h3>
-    </div>
-
-
-    <!-- VALENTINOS -->
-
-    <div class="circo" onclick="seleccionarCirco('Circo de los Valentinos')">
-        <img src="valentinos.jpeg">
-        <h3>Circo de los Valentinos</h3>
-    </div>
-
-
-    <!-- REPETIMOS PARA QUE LA LINEA SEA CONTINUA -->
-
-    <div class="circo" onclick="seleccionarCirco('Circo Continental')">
-        <img src="continental.jpeg">
-        <h3>Circo Continental</h3>
-    </div>
-
-    <div class="circo" onclick="seleccionarCirco('Circo Panamericano')">
-        <img src="panamericano.jpeg">
-        <h3>Circo Panamericano</h3>
-    </div>
-
-    <div class="circo" onclick="seleccionarCirco('Zebra')">
-        <img src="zebra.jpeg">
-        <h3>Zebra — La Nueva Carpa</h3>
-    </div>
-
-    <div class="circo" onclick="seleccionarCirco('Hnos. Fuentes Gasca')">
-        <img src="fuentes.jpeg">
-        <h3>Hnos. Fuentes Gasca</h3>
-    </div>
-
-    <div class="circo" onclick="seleccionarCirco('Circo de los Valentinos')">
-        <img src="valentinos.jpeg">
-        <h3>Circo de los Valentinos</h3>
-    </div>
-
-</div>
-
-</div>
-
-
-<!-- AQUÍ APARECERÁ LA INFORMACIÓN DEL CIRCO -->
-
-<section id="contenido">
-
-    <h2 id="nombreCirco"></h2>
-
-    <div class="selector">
-
-        <h3>📅 Selecciona tu función</h3>
-
-        <select id="funcion">
-            <option>Selecciona una función</option>chile
-         </option>
-        
-
-    </div>
-
-</section>
-
+<footer>Tickets Plus Circus · Circos de Roblox</footer>
 
 <script>
+/*
+  CONFIGURACIÓN:
+  Para añadir un circo, duplica un objeto dentro de CIRCOS.
+  Cambia id, nombre, logo, funciones, fechas, horarios y secciones.
+  Cada id debe ser único.
+  Las fechas y horarios de ejemplo deben confirmarse con cada circo.
+*/
 
-function seleccionarCirco(nombre) {
+const CIRCOS = [
+  {
+    id:"continental",
+    nombre:"Circo Continental",
+    logo:"continental.jpeg",
+    activo:true,
+    funciones:[
+      {
+        id:"continental-1",
+        nombre:"Primera función",
+        fecha:"2026-11-07",
+        horarios:{Chile:"20:30",México:"18:30",Colombia:"19:30",Venezuela:"20:30"},
+        secciones:[
+          {id:"platea",nombre:"Platea",cantidadAsientos:144},
+          {id:"vip",nombre:"VIP",cantidadAsientos:48}
+        ]
+      },
+      {
+        id:"continental-2",
+        nombre:"Segunda función",
+        fecha:"2026-11-07",
+        horarios:{Chile:"22:30",México:"20:30",Colombia:"21:30",Venezuela:"22:30"},
+        secciones:[
+          {id:"platea",nombre:"Platea",cantidadAsientos:144},
+          {id:"vip",nombre:"VIP",cantidadAsientos:48}
+        ]
+      }
+    ]
+  },
+  {
+    id:"panamericano",
+    nombre:"Circo Panamericano",
+    logo:"panamericano.jpeg",
+    activo:true,
+    funciones:[
+      {
+        id:"panamericano-1",
+        nombre:"Primera función",
+        fecha:"2026-11-07",
+        horarios:{Chile:"20:00",México:"18:00",Colombia:"19:00",Venezuela:"20:00"},
+        secciones:[
+          {id:"platea",nombre:"Platea",cantidadAsientos:40},
+          {id:"galeria",nombre:"Galería",cantidadAsientos:60}
+        ]
+      }
+    ]
+  },
+  {
+    id:"fenix",
+    nombre:"Circo Fénix",
+    logo:"fenix.jpeg",
+    activo:true,
+    funciones:[
+      {
+        id:"fenix-1",
+        nombre:"Primera función",
+        fecha:"2026-11-07",
+        horarios:{Chile:"20:00",México:"18:00",Colombia:"19:00",Venezuela:"20:00"},
+        secciones:[
+          {id:"vip",nombre:"Palco VIP",cantidadAsientos:20},
+          {id:"general",nombre:"General",cantidadAsientos:80}
+        ]
+      }
+    ]
+  },
+  {
+    id:"fuentes",
+    nombre:"Hnos. Fuentes Gasca",
+    logo:"fuentes.jpeg",
+    activo:true,
+    funciones:[
+      {
+        id:"fuentes-1",
+        nombre:"Primera función",
+        fecha:"2026-11-07",
+        horarios:{Chile:"20:00",México:"18:00",Colombia:"19:00",Venezuela:"20:00"},
+        secciones:[
+          {id:"platea",nombre:"Platea",cantidadAsientos:50},
+          {id:"preferencial",nombre:"Preferencial",cantidadAsientos:30}
+        ]
+      }
+    ]
+  },
+  {
+    id:"valentinos",
+    nombre:"Circo de los Valentinos",
+    logo:"valentinos.jpeg",
+    activo:true,
+    funciones:[
+      {
+        id:"valentinos-1",
+        nombre:"Primera función",
+        fecha:"2026-11-07",
+        horarios:{Chile:"20:00",México:"18:00",Colombia:"19:00",Venezuela:"20:00"},
+        secciones:[
+          {id:"platea",nombre:"Platea",cantidadAsientos:36},
+          {id:"palcos",nombre:"Palcos",cantidadAsientos:12}
+        ]
+      }
+    ]
+  }
+];
 
-    document.getElementById("contenido").style.display = "block";
+/* DEMOSTRACIÓN LOCAL; NO ES UNA BASE DE DATOS COMPARTIDA. */
+const CLAVE="tpc-demo-reservas-v1";
+let reservas=[];
+try{reservas=JSON.parse(localStorage.getItem(CLAVE)||"[]")}catch(e){reservas=[]}
 
-    document.getElementById("nombreCirco").innerText =
-        "🎪 " + nombre;
+let circoActual=null;
+let asientoElegido=null;
 
-    document.getElementById("contenido").scrollIntoView({
-        behavior: "smooth"
-    });
+const $=id=>document.getElementById(id);
+
+function guardar(){
+  localStorage.setItem(CLAVE,JSON.stringify(reservas));
 }
 
-</script>
+function opcion(valor,texto){
+  const o=document.createElement("option");
+  o.value=valor;
+  o.textContent=texto;
+  return o;
+}
 
+function dibujarCircos(){
+  const contenedor=$("carrusel");
+  contenedor.replaceChildren();
+
+  CIRCOS.filter(c=>c.activo).forEach(c=>{
+    const b=document.createElement("button");
+    b.type="button";
+    b.className="tarjeta"+(circoActual?.id===c.id?" activo":"");
+
+    const img=document.createElement("img");
+    img.src=c.logo;
+    img.alt="Logo de "+c.nombre;
+
+    const nombre=document.createElement("p");
+    nombre.textContent=c.nombre;
+
+    b.append(img,nombre);
+    b.addEventListener("click",()=>seleccionarCirco(c.id));
+    contenedor.append(b);
+  });
+}
+
+function seleccionarCirco(id){
+  circoActual=CIRCOS.find(c=>c.id===id);
+  asientoElegido=null;
+  $("nombreCirco").textContent=circoActual.nombre;
+  $("descripcion").textContent="Selecciona fecha, función, sección y asiento.";
+  $("fecha").replaceChildren();
+
+  const fechas=[...new Set(circoActual.funciones.map(f=>f.fecha))];
+  fechas.forEach(f=>$("fecha").append(opcion(f,f)));
+
+  dibujarCircos();
+  dibujarFunciones();
+}
+
+function obtenerFuncion(){
+  if(!circoActual)return null;
+  return circoActual.funciones.find(f=>f.id===$("funcion").value)||null;
+}
+
+function obtenerSeccion(){
+  const f=obtenerFuncion();
+  return f?.secciones.find(s=>s.id===$("seccion").value)||null;
+}
+
+function dibujarFunciones(){
+  if(!circoActual)return;
+  const fecha=$("fecha").value;
+  const funciones=circoActual.funciones.filter(f=>f.fecha===fecha);
+  $("funcion").replaceChildren();
+
+  funciones.forEach(f=>$("funcion").append(opcion(f.id,f.nombre)));
+  dibujarDetalles();
+}
+
+function claveReserva(c,f,s,n){
+  return [c.id,f.id,s.id,n].join("|");
+}
+
+function dibujarDetalles(){
+  const f=obtenerFuncion();
+  asientoElegido=null;
+  $("estado").textContent="";
+  $("horarios").replaceChildren();
+  $("seccion").replaceChildren();
+  $("asientos").replaceChildren();
+
+  if(!f)return;
+
+  Object.entries(f.horarios).forEach(([pais,hora])=>{
+    const tarjeta=document.createElement("div");
+    tarjeta.className="hora";
+    const nombre=document.createElement("strong");
+    nombre.textContent=pais;
+    const tiempo=document.createElement("span");
+    tiempo.textContent=hora;
+    tarjeta.append(nombre,tiempo);
+    $("horarios").append(tarjeta);
+  });
+
+  f.secciones.forEach(s=>{
+    $("seccion").append(opcion(s.id,s.nombre+" ("+s.cantidadAsientos+" asientos)"));
+  });
+
+  dibujarAsientos();
+}
+
+function dibujarAsientos(){
+  const c=circoActual,f=obtenerFuncion(),s=obtenerSeccion();
+  const contenedor=$("asientos");
+  contenedor.replaceChildren();
+  asientoElegido=null;
+
+  if(!c||!f||!s)return;
+
+  for(let n=1;n<=s.cantidadAsientos;n++){
+    const clave=claveReserva(c,f,s,n);
+    const ocupado=reservas.some(r=>r.clave===clave);
+
+    const b=document.createElement("button");
+    b.type="button";
+    b.className="asiento";
+    b.textContent=n;
+    b.setAttribute("aria-label","Asiento "+n+(ocupado?", ocupado":", disponible"));
+
+    if(ocupado){
+      b.classList.add("ocupado");
+      b.disabled=true;
+    }else{
+      b.addEventListener("click",()=>{
+        asientoElegido=n;
+        document.querySelectorAll(".asiento.elegido").forEach(x=>x.classList.remove("elegido"));
+        b.classList.add("elegido");
+        $("estado").textContent="Has seleccionado el asiento "+n+".";
+      });
+    }
+    contenedor.append(b);
+  }
+}
+
+$("fecha").addEventListener("change",dibujarFunciones);
+$("funcion").addEventListener("change",dibujarDetalles);
+$("seccion").addEventListener("change",dibujarAsientos);
+
+$("reservar").addEventListener("click",()=>{
+  const usuario=$("usuario").value.trim();
+  const f=obtenerFuncion();
+  const s=obtenerSeccion();
+
+  if(!circoActual||!f||!s){
+    $("estado").textContent="Selecciona primero un circo y una función.";
+    return;
+  }
+  if(!/^[a-zA-Z0-9_]{3,20}$/.test(usuario)){
+    $("estado").textContent="Escribe un usuario de Roblox válido (3 a 20 caracteres).";
+    return;
+  }
+  if(!asientoElegido){
+    $("estado").textContent="Selecciona un asiento disponible.";
+    return;
+  }
+
+  const clave=claveReserva(circoActual,f,s,asientoElegido);
+  if(reservas.some(r=>r.clave===clave)){
+    $("estado").textContent="Ese asiento ya figura ocupado en esta demostración.";
+    dibujarAsientos();
+    return;
+  }
+
+  reservas.push({
+    clave,
+    circo:circoActual.nombre,
+    fecha:f.fecha,
+    funcion:f.nombre,
+    seccion:s.nombre,
+    asiento:asientoElegido,
+    usuario
+  });
+
+  guardar();
+  $("estado").textContent=
+    "Prueba guardada en este navegador. No se ha enviado una reserva real ni un correo.";
+
+  dibujarAsientos();
+});
+
+dibujarCircos();
+if(CIRCOS.some(c=>c.activo&&c.funciones.length)){
+  seleccionarCirco(CIRCOS.find(c=>c.activo&&c.funciones.length).id);
+}
+</script>
 </body>
 </html>
