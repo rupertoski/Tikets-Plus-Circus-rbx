@@ -86,7 +86,30 @@ footer{text-align:center;padding:22px;color:#c9bfd5}
 
 <footer>Tickets Plus Circus · Circos de Roblox</footer>
 
-<script>
+<script><script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyCn4YdiI6xCLk-WbaFo3AsW2spNElWfecg",
+    authDomain: "tickets-plus-circus.firebaseapp.com",
+    databaseURL: "https://tickets-plus-circus-default-rtdb.firebaseio.com",
+    projectId: "tickets-plus-circus",
+    storageBucket: "tickets-plus-circus.firebasestorage.app",
+    messagingSenderId: "1095473358646",
+    appId: "1:1095473358646:web:fc372b376e221093fbf597",
+    measurementId: "G-SZ4Q3EVTE2"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
 /*
   CONFIGURACIÓN:
   Para añadir un circo, duplica un objeto dentro de CIRCOS.
