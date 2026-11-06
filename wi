@@ -4,7 +4,8 @@ function obtenerFuncion(){
 }
 
 function obtenerSeccion(){
-  const f=obtenerFuncion();</script>
+  const f=obtenerFuncion();
+</script>
 </body>
 </html>
   return f?.secciones.find(s=>s.id===seccionElegida)||null;
