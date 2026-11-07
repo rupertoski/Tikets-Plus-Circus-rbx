@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#160d29">
+  <title>Tickets Plus Circus</title>
+  <style>
+    :root{
+      --bg:#10091d;--panel:#1d1230;--panel2:#28183d;--gold:#f2c66d;
+      --gold2:#ffe3a2;--text:#fffaf0;--muted:#c8bad8;--line:#49345f;
+      --green:#53d69a;--red:#ff737d;--shadow:0 16px 40px #0005;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:radial-gradient(ellipse at top,#38204f 0,#160d25 42%,#0d0716 100%);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;min-height:100vh}
+    .wrap{width:min(1080px,calc(100% - 28px));margin:auto;padding:26px 0 50px}
+    header{text-align:center;padding:12px 0 22px}
+    .eyebrow{color:var(--gold);font-size:.78rem;letter-spacing:.22em;text-transform:uppercase;font-weight:800}
+    h1{font-family:Georgia,serif;color:var(--gold2);font-size:clamp(2rem,6vw,3.7rem);line-height:1.05;margin:10px 0;text-shadow:0 4px 18px #0008}
+    header p{color:var(--muted);margin:0}
+    .ribbon{height:4px;width:min(230px,60%);margin:18px auto;background:linear-gradient(90deg,transparent,var(--gold),transparent);border-radius:99px}
+    .panel{background:linear-gradient(145deg,#241638ee,#170f25f2);border:1px solid var(--line);border-radius:20px;padding:20px;margin:16px 0;box-shadow:var(--shadow)}
+    .section-title{display:flex;align-items:center;gap:10px;margin:0 0 14px;font-size:1.12rem;color:var(--gold2)}
+    .circus-list{display:flex;gap:12px;overflow-x:auto;padding:4px 2px 12px;scrollbar-color:#8865a7 #241638}
+    .circus-card{flex:0 0 148px;min-height:145px;border:1px solid var(--line);border-radius:15px;background:#211531;color:var(--text);padding:12px;cursor:pointer;text-align:center;transition:.18s}
+    .circus-card:hover{transform:translateY(-2px);border-color:var(--gold)}
+    .circus-card.selected{border:2px solid var(--gold);background:#382447;box-shadow:0 0 0 3px #f2c66d22}
+    .circus-card img{width:76px;height:76px;object-fit:contain;display:block;margin:0 auto 8px;border-radius:10px}
+    .circus-card strong{display:block;font-size:.88rem;line-height:1.2}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    label{display:block;color:var(--muted);font-size:.88rem;font-weight:650;margin:0 0 7px}
+    input,select{width:100%;background:#100a1b;color:var(--text);border:1px solid #5b4471;border-radius:11px;padding:12px 13px;font:inherit;outline:none}
+    input:focus,select:focus{border-color:var(--gold);box-shadow:0 0 0 3px #f2c66d22}
+    select option{background:#211531}
+    .schedule{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:9px;margin-top:14px}
+    .time-card{background:#120c1d;border:1px solid var(--line);border-radius:12px;padding:11px}
+    .time-card b{display:block;color:var(--gold);font-size:.82rem}
+    .time-card span{font-size:1.1rem;font-weight:750}
+    .hint{color:var(--muted);font-size:.86rem;margin:10px 0 0}
+    .sections{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+    .section-card{background:#170f25;border:1px solid #57416c;border-radius:15px;padding:15px;text-align:left;color:var(--text);cursor:pointer;transition:.18s;width:100%}
+    .section-card:hover:not(:disabled){border-color:var(--gold);transform:translateY(-2px)}
+    .section-card.chosen{border:2px solid var(--gold);background:#382447}
+    .section-card:disabled{opacity:.72;cursor:not-allowed}
+    .section-name{font-weight:800;color:var(--gold2);font-size:1rem;display:block;margin-bottom:7px}
+    .capacity{font-size:.85rem;color:var(--muted)}
+    .bar{height:8px;background:#39294a;border-radius:99px;overflow:hidden;margin:11px 0 8px}
+    .bar span{height:100%;display:block;background:var(--green);border-radius:99px}
+    .bar span.full{background:var(--red)}
+    .availability{font-size:.83rem;font-weight:800}
+    .available{color:var(--green)}.sold{color:var(--red)}
+    .actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:16px}
+    .primary{border:0;border-radius:12px;padding:13px 20px;background:linear-gradient(135deg,#f5d487,#d99c3e);color:#24152b;font-weight:900;font-size:1rem;cursor:pointer}
+    .primary:hover{filter:brightness(1.07)}
+    .primary:disabled{opacity:.5;cursor:not-allowed}
+    .status{min-height:24px;margin:12px 0 0;font-weight:650}
+    .status.ok{color:var(--green)}.status.error{color:#ff9ba2}
+    .notice{border-left:3px solid var(--gold);padding:10px 13px;background:#241936;border-radius:0 10px 10px 0;color:var(--muted);font-size:.86rem;margin-top:14px}
+    footer{text-align:center;color:#a99ab9;font-size:.78rem;padding:18px}
+    @media(max-width:640px){.grid{grid-template-columns:1fr}.panel{padding:16px}.wrap{width:min(100% - 20px,1080px)}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Reservas para espectáculos de Roblox</div>
+    <h1>Tickets Plus Circus</h1>
+    <p>Elige tu circo, función y sección para solicitar tu lugar.</p>
+    <div class="ribbon"></div>
+  </header>
+
+  <section class="panel">
+    <h2 class="section-title">🎪 Circos participantes</h2>
+    <div id="circusList" class="circus-list" aria-label="Lista de circos"></div>
+    <p class="hint">Desliza horizontalmente para ver los demás circos.</p>
+  </section>
+
+  <section class="panel">
+    <h2 class="section-title">🎟️ Datos de la reserva</h2>
+    <div class="grid">
+      <div>
+        <label for="robloxUser">Usuario de Roblox</label>
+        <input id="robloxUser" maxlength="20" autocomplete="off" placeholder="Escribe tu usuario">
+      </div>
+      <div>
+        <label for="showDate">Fecha</label>
+        <select id="showDate"></select>
+      </div>
+      <div>
+        <label for="showFunction">Función</label>
+        <select id="showFunction"></select>
+      </div>
+      <div>
+        <label>Circo seleccionado</label>
+        <input id="selectedCircusName" readonly value="Selecciona un circo">
+      </div>
+    </div>
+    <div id="schedule" class="schedule" aria-live="polite"></div>
+  </section>
+
+  <section class="panel">
+    <h2 class="section-title">💺 Selecciona una sección</h2>
+    <p class="hint" style="margin:0 0 14px">Cada reserva ocupa un cupo. Cuando se completa la capacidad, la sección aparecerá como AGOTADA.</p>
+    <div id="sections" class="sections"></div>
+    <div class="actions">
+      <button id="reserveButton" class="primary" type="button">Confirmar reserva de prueba</button>
+    </div>
+    <p id="status" class="status" role="status" aria-live="polite"></p>
+    <div class="notice">Aviso: esta versión guarda las reservas solamente en este navegador. Todavía no comparte los cupos entre visitantes ni envía correos. Para reservas reales y sincronizadas hay que conectar Firebase con reglas seguras.</div>
+  </section>
+
+  <footer>Tickets Plus Circus · Plataforma de reservas para circos de Roblox</footer>
+</div>
+
+<script>
+"use strict";
+
+/*
+  CONFIGURACIÓN DE CIRCOS
+  Para agregar un circo, duplica un objeto de esta lista y cambia:
+  id, nombre, logo, funciones, fechas, horarios y secciones.
+  capacidad = máximo de reservas permitidas en esa sección por función.
+*/
+const CIRCOS = [
+  {
+    id:"continental", nombre:"Circo Continental", logo:"continental.jpeg", activo:true,
+    funciones:[
+      {id:"continental-1", nombre:"Primera función", fecha:"2026-11-07",
+       horarios:{Chile:"20:30",México:"18:30",Colombia:"19:30",Venezuela:"20:30"},
+       secciones:[{id:"platea",nombre:"Platea",capacidad:50},{id:"vip",nombre:"VIP",capacidad:25}]},
+      {id:"continental-2", nombre:"Segunda función", fecha:"2026-11-07",
+       horarios:{Chile:"22:30",México:"20:30",Colombia:"21:30",Venezuela:"22:30"},
+       secciones:[{id:"platea",nombre:"Platea",capacidad:50},{id:"vip",nombre:"VIP",capacidad:25}]}
+    ]
+  },
+  {
+    id:"panamericano", nombre:"Circo Panamericano", logo:"panamericano.jpeg", activo:true,
+    funciones:[
+      {id:"panamericano-1",nombre:"Primera función",fecha:"2026-11-07",
+       horarios:{Chile:"20:00",México:"18:00",Colombia:"19:00",Venezuela:"20:00"},
+       secciones:[{id:"platea",nombre:"Platea",capacidad:40},{id:"galeria",nombre:"Galería",capacidad:60}]}
+    ]
+  },
+  {
+    id:"fenix",nombre:"Circo Fénix",logo:"fenix.jpeg",activo:true,
+    funciones:[
+      {id:"fenix-1",nombre:"Primera función",fecha:"2026-11-07",
+       horarios:{Chile:"20:00",México:"18:00",Colombia:"19:00",Venezuela:"20:00"},
+       secciones:[{id:"vip",nombre:"Palco VIP",capacidad:20},{id:"general",nombre:"General",capacidad:80}]}
+    ]
+  },
+  {
+    id:"fuentes",nombre:"Hnos. Fuentes Gasca",logo:"fuentes.jpeg",activo:true,
+    funciones:[
+      {id:"fuentes-1",nombre:"Primera función",fecha:"2026-11-07",
+       horarios:{Chile:"20:00",México:"18:00",Colombia:"19:00",Venezuela:"20:00"},
+       secciones:[{id:"platea",nombre:"Platea",capacidad:50},{id:"preferencial",nombre:"Preferencial",capacidad:30}]}
+    ]
+  },
+  {
+    id:"valentinos",nombre:"Circo de los Valentinos",logo:"valentinos.jpeg",activo:true,
+    funciones:[
+      {id:"valentinos-1",nombre:"Primera función",fecha:"2026-11-07",
+       horarios:{Chile:"20:00",México:"18:00",Colombia:"19:00",Venezuela:"20:00"},
+       secciones:[{id:"platea",nombre:"Platea",capacidad:36},{id:"palcos",nombre:"Palcos",capacidad:12}]}
+    ]
+  }
+];
+
+const STORAGE_KEY = "tickets-plus-circus-reservas-v2";
+let reservas = cargarReservas();
+let circoActual = null;
+let seccionElegida = null;
+
+const $ = id => document.getElementById(id);
+function cargarReservas(){
+  try {
+    const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    return Array.isArray(data) ? data : [];
+  } catch (error) {
+    return [];
+  }
+}
+function guardarReservas(){
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(reservas));
+    return true;
+  } catch (error) {
+    mostrarEstado("El navegador no permitió guardar la reserva.", "error");
+    return false;
+  }
+}
+function mostrarEstado(mensaje, tipo=""){
+  const el=$("status");
+  el.textContent=mensaje;
+  el.className="status"+(tipo?" "+tipo:"");
+}
+function crearOpcion(valor,texto){
+  const option=document.createElement("option");
+  option.value=valor;
+  option.textContent=texto;
+  return option;
+}
+function funcionActual(){
+  if(!circoActual) return null;
+  return circoActual.funciones.find(f=>f.id===$("showFunction").value) || null;
+}
+function seccionActual(){
+  const f=funcionActual();
+  return f ? f.secciones.find(s=>s.id===seccionElegida) || null : null;
+}
+function contarCupos(circo,funcion,seccion){
+  return reservas.filter(r=>
+    r.circoId===circo.id &&
+    r.funcionId===funcion.id &&
+    r.seccionId===seccion.id
+  ).length;
+}
+function dibujarCircos(){
+  const contenedor=$("circusList");
+  contenedor.replaceChildren();
+  CIRCOS.filter(c=>c.activo).forEach(c=>{
+    const button=document.createElement("button");
+    button.type="button";
+    button.className="circus-card"+(circoActual?.id===c.id?" selected":"");
+    button.setAttribute("aria-pressed",circoActual?.id===c.id?"true":"false");
+    const img=document.createElement("img");
+    img.src=c.logo;
+    img.alt="Logo de "+c.nombre;
+    img.onerror=()=>{img.style.display="none";};
+    const name=document.createElement("strong");
+    name.textContent=c.nombre;
+    button.append(img,name);
+    button.addEventListener("click",()=>seleccionarCirco(c.id));
+    contenedor.append(button);
+  });
+}
+function seleccionarCirco(id){
+  circoActual=CIRCOS.find(c=>c.id===id && c.activo) || null;
+  seccionElegida=null;
+  $("selectedCircusName").value=circoActual ? circoActual.nombre : "";
+  mostrarEstado("");
+  dibujarCircos();
+  dibujarFechas();
+}
+function dibujarFechas(){
+  const dateSelect=$("showDate");
+  dateSelect.replaceChildren();
+  $("showFunction").replaceChildren();
+  $("schedule").replaceChildren();
+  $("sections").replaceChildren();
+  if(!circoActual) return;
+
+  const fechas=[...new Set(circoActual.funciones.map(f=>f.fecha))].sort();
+  fechas.forEach(fecha=>dateSelect.append(crearOpcion(fecha,formatearFecha(fecha))));
+  dibujarFunciones();
+}
+function formatearFecha(fecha){
+  const [year,month,day]=fecha.split("-").map(Number);
+  return new Intl.DateTimeFormat("es-CL",{day:"2-digit",month:"long",year:"numeric"})
+    .format(new Date(year,month-1,day));
+}
+function dibujarFunciones(){
+  const fecha=$("showDate").value;
+  const funciones=circoActual ? circoActual.funciones.filter(f=>f.fecha===fecha) : [];
+  const select=$("showFunction");
+  select.replaceChildren();
+  funciones.forEach(f=>select.append(crearOpcion(f.id,f.nombre)));
+  seccionElegida=null;
+  dibujarDetalles();
+}
+function dibujarDetalles(){
+  const f=funcionActual();
+  const schedule=$("schedule");
+  schedule.replaceChildren();
+  $("sections").replaceChildren();
+  if(!f) return;
+
+  Object.entries(f.horarios).forEach(([pais,hora])=>{
+    const card=document.createElement("div");
+    card.className="time-card";
+    const country=document.createElement("b");
+    country.textContent=pais;
+    const time=document.createElement("span");
+    time.textContent=hora;
+    card.append(country,time);
+    schedule.append(card);
+  });
+  dibujarSecciones();
+}
+function dibujarSecciones(){
+  const contenedor=$("sections");
+  contenedor.replaceChildren();
+  const f=funcionActual();
+  if(!circoActual || !f) return;
+
+  f.secciones.forEach(s=>{
+    const ocupados=contarCupos(circoActual,f,s);
+    const disponibles=Math.max(0,s.capacidad-ocupados);
+    const porcentaje=s.capacidad>0?Math.min(100,ocupados/s.capacidad*100):100;
+    const agotada=disponibles===0;
+
+    const button=document.createElement("button");
+    button.type="button";
+    button.className="section-card"+(seccionElegida===s.id?" chosen":"");
+    button.disabled=agotada;
+    button.setAttribute("aria-pressed",seccionElegida===s.id?"true":"false");
+
+    const name=document.createElement("span");
+    name.className="section-name";
+    name.textContent=s.nombre;
+    const capacity=document.createElement("span");
+    capacity.className="capacity";
+    capacity.textContent="Reservados: "+ocupados+" de "+s.capacidad;
+
+    const bar=document.createElement("div");
+    bar.className="bar";
+    const fill=document.createElement("span");
+    fill.style.width=porcentaje+"%";
+    if(agotada) fill.classList.add("full");
+    bar.append(fill);
+
+    const availability=document.createElement("span");
+    availability.className="availability "+(agotada?"sold":"available");
+    availability.textContent=agotada?"🔴 AGOTADO":"🟢 "+disponibles+" cupos disponibles";
+
+    button.append(name,capacity,bar,availability);
+    if(!agotada){
+      button.addEventListener("click",()=>{
+        seccionElegida=s.id;
+        mostrarEstado("Sección seleccionada: "+s.nombre+".");
+        dibujarSecciones();
+      });
+    }
+    contenedor.append(button);
+  });
+}
+function usuarioYaReservoEnEsteCirco(usuario){
+  return reservas.some(r=>
+    r.circoId===circoActual.id &&
+    String(r.usuario).toLowerCase()===usuario.toLowerCase()
+  );
+}
+function confirmarReserva(){
+  const usuario=$("robloxUser").value.trim();
+  const f=funcionActual();
+  const s=seccionActual();
+
+  if(!circoActual || !f){
+    mostrarEstado("Selecciona un circo y una función.", "error");
+    return;
+  }
+  if(!/^[a-zA-Z0-9_]{3,20}$/.test(usuario)){
+    mostrarEstado("Escribe un usuario de Roblox válido (3 a 20 caracteres).", "error");
+    return;
+  }
+  if(!s){
+    mostrarEstado("Selecciona una sección antes de continuar.", "error");
+    return;
+  }
+  if(usuarioYaReservoEnEsteCirco(usuario)){
+    mostrarEstado("Este usuario ya tiene una reserva en este circo. Solo se permite una por persona y por circo.", "error");
+    return;
+  }
+  if(contarCupos(circoActual,f,s)>=s.capacidad){
+    mostrarEstado("La sección se acaba de agotar. Selecciona otra.", "error");
+    dibujarSecciones();
+    return;
+  }
+
+  reservas.push({
+    id:(crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random()),
+    circoId:circoActual.id,
+    circo:circoActual.nombre,
+    funcionId:f.id,
+    funcion:f.nombre,
+    fecha:f.fecha,
+    seccionId:s.id,
+    seccion:s.nombre,
+    usuario:usuario,
+    creadoEn:new Date().toISOString()
+  });
+
+  if(!guardarReservas()){
+    reservas.pop();
+    return;
+  }
+  seccionElegida=null;
+  mostrarEstado("¡Reserva de prueba guardada! "+usuario+" · "+f.nombre+" · "+s.nombre+".", "ok");
+  dibujarSecciones();
+}
+$("showDate").addEventListener("change",dibujarFunciones);
+$("showFunction").addEventListener("change",()=>{
+  seccionElegida=null;
+  mostrarEstado("");
+  dibujarDetalles();
+});
+$("reserveButton").addEventListener("click",confirmarReserva);
+
+const primerCirco=CIRCOS.find(c=>c.activo && c.funciones.length>0);
+if(primerCirco) seleccionarCirco(primerCirco.id);
+</script>
+</body>
+</html>
